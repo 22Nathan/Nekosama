@@ -16,6 +16,7 @@ const Filters = ({
       horizontal={true}
       showsHorizontalScrollIndicator={true}
       persistentScrollbar={true}
+      style={{maxHeight:45}}
     >
       <View style={styles.filter}>
         <View style={styles.pickerContainer}>
