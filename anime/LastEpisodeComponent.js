@@ -22,42 +22,56 @@ const LastEpisodeComponent = ({ title, url_image, episode, time, onClick, lang }
 };
 
 const styles = StyleSheet.create({
-    animeCard: {
-      // Ajoutez ici vos styles pour la carte de l'épisode
-    },
-    imageContainer: {
-      // Ajoutez ici vos styles pour le conteneur de l'image
-    },
-    icons: {
-      // Ajoutez ici vos styles pour les icônes
-      flexDirection: 'row',
-      alignItems: 'center',
-    },
-    icon: {
-      // Ajoutez ici vos styles pour l'icône (VF/VOSTFR)
-      // Exemple : color: 'red',
-    },
-    timeIcon: {
-      // Ajoutez ici vos styles pour l'icône du temps
-      // Exemple : color: 'red',
-    },
-    image: {
-      // Ajoutez ici vos styles pour l'image
-      // Exemple : width: 100, height: 100,
-    },
-    infoContainer: {
-      // Ajoutez ici vos styles pour le conteneur des informations
-    },
-    title: {
-      // Ajoutez ici vos styles pour le titre
-    },
-    textContainer: {
-      // Ajoutez ici vos styles pour le conteneur de texte
-    },
-    episode: {
-      // Ajoutez ici vos styles pour le texte de l'épisode
-    },
-  });
+  animeCard: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10,
+    // flex: 1,
+    // zIndex:20,
+    // width: '100%', height: '100%',
+    padding: 10,
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    elevation: 4,
+  },
+  imageContainer: {
+    marginRight: 10,
+  },
+  icons: {
+    flexDirection: 'row',
+    marginBottom: 5,
+  },
+  icon: {
+    marginRight: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    fontSize: 12,
+    color: '#fff',
+    borderRadius: 4,
+  },
+  red: {
+    backgroundColor: 'red',
+  },
+  image: {
+    width: 100,
+    height: 150,
+    resizeMode: 'cover',
+  },
+  infoContainer: {
+    flex: 1,
+  },
+  title: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  textContainer: {
+    flexDirection: 'row',
+  },
+  info: {
+    marginRight: 10,
+  },
+});
 
 export default LastEpisodeComponent;
 
