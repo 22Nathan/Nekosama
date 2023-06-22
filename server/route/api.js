@@ -50,23 +50,37 @@ async function getAnimeByID(paramId){
 router.get('/api/anime', async (req, res) => {
     try {
         const animeData = await animeVostfr.loadAnime()
-        // 5549
-        // console.log(animeData.length);
-        try {
-            if(animeData && animeData.length > 0){
-                animeData.map(async (anime, i) => {
-                // console.log('ss', await getAnimeParID(anime.id) === false );
-                // check si existe déjà
-                    if( anime.id ){
-                        if( await getAnimeByID(anime.id) === false ){
-                            const newAnime = new Anime( anime )
-                            const insert = await newAnime.save()
-                            // console.log( 'insert' )
-                        }
-                    }
-                })
-            }
-        } catch ( error ) { console.error( 'api get all ' + erreur ) }
+
+        // try {
+        //     if(animeData && animeData.length > 0){
+        //         animeData.map(async (anime, i) => {
+        //         // console.log('ss', await getAnimeParID(anime.id) === false );
+        //         // check si existe déjà
+        //             if( anime.id ){
+        //                 if( await getAnimeByID(anime.id) === false ){
+        //                     const newAnime = new Anime( anime )
+        //                     const insert = await newAnime.save()
+        //                     // console.log( 'insert' )
+        //                 }
+        //             }
+        //         })
+        //     }
+        // } catch ( error ) { console.error( 'api get all ' + erreur ) }
+
+        const currentItemsInMongo = await getAllAnimes()
+        const items = animeData.filter( scrappingItem => {
+            return !currentItemsInMongo.some( baseItem => baseItem.id === scrappingItem.id )
+        })
+
+        if( items && items.length > 0 ){
+            console.log('items manquant : ' + items.length)
+            // items.map((item)=>{
+            //     try { item.save() } 
+            //     catch (error) { console.log( error ) }
+            // })
+            await Anime.insertMany( items )
+        } else { console.log('Déjà à jour') }
+
         // res.status(200).json(animeData);
         res.status(200).json( await getAllAnimes() )
     } catch (error) {
