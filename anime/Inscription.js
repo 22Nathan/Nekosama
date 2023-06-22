@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
 
 const Inscription = ({ navigation }) => {
@@ -15,10 +15,14 @@ const Inscription = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Inscription</Text>
-      <TextInput style={styles.input} placeholder="Nom d'utilisateur" />
+      <TextInput style={styles.input} placeholder="Email" keyboardType="email-address" autoCapitalize="none" autoCorrect={false} autoCompleteType="email"/>
       <TextInput style={styles.input} placeholder="Mot de passe" secureTextEntry={true} />
-      <Button title="S'inscrire" onPress={handleConnexion} />
-      <Button title="Connexion" onPress={() => navigation.navigate('Connexion')} />
+      <TouchableOpacity style={styles.button} onPress={handleConnexion}>
+        <Text style={styles.buttonText}>S'inscrire</Text>
+      </TouchableOpacity>
+      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Connexion')}>
+        <Text style={styles.buttonText}>Connexion</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -41,6 +45,21 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
+    borderRadius: 8
+  },
+  button: {
+    width: '80%',
+    height: 40,
+    backgroundColor: 'blue',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+    borderRadius: 8
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
