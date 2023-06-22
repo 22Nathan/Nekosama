@@ -1,6 +1,7 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableWithoutFeedback, TouchableOpacity, Text } from 'react-native';
 import LastEpisodeComponent from './LastEpisodeComponent';
+import AnimeCard from './AnimeCard';
 
 const RenderLastEpisodes = ({ showLastEpisodes, lastEpisodes, currentLastEpisodesPage, handleAnimeClick, changeLastEpisodesPage }) => {
   if (!showLastEpisodes) {
@@ -16,25 +17,27 @@ const RenderLastEpisodes = ({ showLastEpisodes, lastEpisodes, currentLastEpisode
   const currentEpisodes = lastEpisodes.slice(start, end);
 
   return (
-    <View style={styles.lastEpisodes}>
-      <Text style={styles.heading}>Derniers épisodes</Text>
-      <View style={styles.row}>
-        {currentEpisodes.map((episode) => (
-          <TouchableOpacity key={episode.timestamp} style={styles.col} onPress={() => handleAnimeClick(episode)}>
+    <ScrollView contentContainerStyle={styles.animeList} columnWrapperStyle={styles.row}>
+      {currentEpisodes.map((episode) => (
+        <TouchableWithoutFeedback key={episode.timestamp} >
+          <View style={styles.col}>
             <LastEpisodeComponent
-              title={episode.title}
-              url_image={episode.url_bg}
-              episode={episode.episode}
-              time={episode.time}
-              lang={episode.lang === 'vf'}
+              onClick={() => handleAnimeClick(episode)}
+              title = {episode.title}
+              imageUrl = {episode.url_bg}
+              time = {episode.time}
+              lang = {episode.lang === 'vf'}
+              start_date_year={episode.start_date_year}
+              nb_eps={episode.nb_eps}
+              format={episode.type}
             />
-          </TouchableOpacity>
-        ))}
-      </View>
+          </View>
+        </TouchableWithoutFeedback>
+      ))}
       <View style={styles.pagination}>
         {renderLastEpisodesPaginationButtons(currentLastEpisodesPage, lastEpisodes.length, changeLastEpisodesPage)}
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -76,40 +79,73 @@ const renderLastEpisodesPaginationButtons = (currentLastEpisodesPage, lastEpisod
   return paginationButtons;
 };
 
+// const styles = StyleSheet.create({
+//   lastEpisodes: {
+//     // Ajoutez ici vos styles pour le conteneur des derniers épisodes
+//   },
+//   heading: {
+//     // Ajoutez ici vos styles pour le titre "Derniers épisodes"
+//   },
+//   row: {
+//     // Ajoutez ici vos styles pour la rangée d'épisodes
+//     // flexDirection: 'row',
+//   },
+//   col: {
+//     // Ajoutez ici vos styles pour la colonne d'un épisode
+//     flex: 1,
+//   },
+//   pagination: {
+//     // Ajoutez ici vos styles pour la pagination
+//     flexDirection: 'row',
+//     justifyContent: 'center',
+//     alignItems: 'center',
+//   },
+//   paginationButton: {
+//     // Ajoutez ici vos styles pour les boutons de pagination
+//     marginHorizontal: 5,
+//     paddingVertical: 5,
+//   },
+//   activeButton: {
+//     // Ajoutez ici vos styles pour le bouton de pagination actif
+//     marginHorizontal: 5,
+//     paddingVertical: 5,
+//     backgroundColor: 'blue',
+//   },
+//   noAnime: {
+//     // Ajoutez ici vos styles pour le texte "Aucun anime trouvé"
+//   },
+// });
+
 const styles = StyleSheet.create({
-  lastEpisodes: {
-    // Ajoutez ici vos styles pour le conteneur des derniers épisodes
+  app: {
+    flex: 1,
+    marginTop: 30,
   },
-  heading: {
-    // Ajoutez ici vos styles pour le titre "Derniers épisodes"
-  },
-  row: {
-    // Ajoutez ici vos styles pour la rangée d'épisodes
-    flexDirection: 'row',
-  },
-  col: {
-    // Ajoutez ici vos styles pour la colonne d'un épisode
+  list_anime: {
     flex: 1,
   },
-  pagination: {
-    // Ajoutez ici vos styles pour la pagination
-    flexDirection: 'row',
-    justifyContent: 'center',
+  search: {
+    marginBottom: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    borderRadius: 6,
+    backgroundColor: '#f5f5f5',
+  },
+  animeList: {
+    flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'center'
   },
-  paginationButton: {
-    // Ajoutez ici vos styles pour les boutons de pagination
-    marginHorizontal: 5,
-    paddingVertical: 5,
+  row: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
   },
-  activeButton: {
-    // Ajoutez ici vos styles pour le bouton de pagination actif
-    marginHorizontal: 5,
-    paddingVertical: 5,
-    backgroundColor: 'blue',
+  col: {
+    marginBottom: 10,
   },
-  noAnime: {
-    // Ajoutez ici vos styles pour le texte "Aucun anime trouvé"
+  pagination: {
+    marginBottom: 20
   },
 });
 
