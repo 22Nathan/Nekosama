@@ -14,6 +14,7 @@ const Inscription = ({ navigation }) => {
     <View style={styles.container}>
       <Text style={styles.title}>Inscription</Text>
       <TextInput style={styles.input} placeholder="Nom d'utilisateur" />
+      <TextInput style={styles.input} placeholder="Adresse Mail" />
       <TextInput style={styles.input} placeholder="Mot de passe" secureTextEntry={true} />
       <Button title="S'inscrire" onPress={handleInscription} />
       <Button title="Connexion" onPress={handleConnexion} />
