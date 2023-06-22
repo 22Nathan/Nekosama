@@ -119,12 +119,12 @@ const styles = StyleSheet.create({
   },
   videoTrailer: {
     flex: 1,
-    width: 600,
+    width: 390,
     marginBottom: 10
   },
   videoStream: {
     flex: 1,
-    width: 600,
+    width: 390
   },
   closeButton: {
     marginTop: 20,
