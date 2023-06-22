@@ -7,6 +7,7 @@ import Navbar from './Navbar';
 import Pagination from './Pagination';
 import Filters from './Filters';
 import RenderLastEpisodes from './RenderLastEpisodes';
+import { ADRESSEIP } from './.CONST.js';
 
 const App = () => {
   const [animes, setAnimes] = useState([]);
@@ -28,7 +29,7 @@ const App = () => {
   useEffect(() => {
     const fetchAnimes = async () => {
       try {
-        const url = isVFMode ? 'http://10.74.1.99:8000/api/animevf' : 'http://10.74.1.99:8000/api/anime';
+        const url = isVFMode ? `http://${ADRESSEIP}:8000/api/animevf` : `http://${ADRESSEIP}:8000/api/anime`;
         const response = await axios.get(url);
         let filteredAnimes = response.data;
 
@@ -60,7 +61,7 @@ const App = () => {
   useEffect(() => {
     const fetchLastEpisodes = async () => {
       try {
-        const response = await axios.get('http://10.74.1.99:8000/api/last-episodes');
+        const response = await axios.get(`http://${ADRESSEIP}:8000/api/last-episodes`);
         setLastEpisodes(response.data);
       } catch (error) {
         console.error('Error fetching last episodes:', error);
@@ -74,7 +75,7 @@ const App = () => {
     const fetchMoreInfo = async () => {
       if (selectedAnime && selectedAnime.url) {
         try {
-          const response = await axios.post('http://10.74.1.99:8000/api/anime/more-info', { url: selectedAnime.url });
+          const response = await axios.post(`http://${ADRESSEIP}:8000/api/anime/more-info`, { url: selectedAnime.url });
           setMoreInfo(response.data);
         } catch (error) {
           console.error('Error fetching more information:', error);
@@ -115,9 +116,10 @@ const App = () => {
     return (
       <ScrollView contentContainerStyle={styles.animeList} columnWrapperStyle={styles.row}>
         {currentAnimes.map((anime) => (
-          <TouchableWithoutFeedback key={anime.id} onPressIn={() => handleAnimeClick(anime)}>
+          <TouchableWithoutFeedback key={anime.id} >
             <View style={styles.col}>
               <AnimeCard
+                onClick={() => handleAnimeClick(anime)}
                 title={anime.title}
                 imageUrl={anime.url_image}
                 start_date_year={anime.start_date_year}

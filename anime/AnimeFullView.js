@@ -3,13 +3,14 @@ import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import axios from 'axios';
 import { WebView } from 'react-native-webview';
 import { Picker } from '@react-native-picker/picker';
+import { ADRESSEIP } from './.CONST.js';
 
 const AnimeFullView = ({ anime, moreInfo, onClose }) => {
   const [embedLink, setEmbedLink] = useState(null);
 
   const handleEpisodeClick = async (url) => {
     try {
-      const response = await axios.post('http://10.74.1.99:8000/api/anime/embed', { url });
+      const response = await axios.post(`http://${ADRESSEIP}:8000/api/anime/embed`, { url });
       const embedLink = response.data['embedLink'][0];
       setEmbedLink(embedLink);
     } catch (error) {
