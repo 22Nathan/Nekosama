@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
 
 const Connexion = ({ navigation }) => {
@@ -17,7 +17,9 @@ const Connexion = ({ navigation }) => {
       <Text style={styles.title}>Connexion</Text>
       <TextInput style={styles.input} placeholder="Nom d'utilisateur" />
       <TextInput style={styles.input} placeholder="Mot de passe" secureTextEntry={true} />
-      <Button title="Se connecter" onPress={handleConnexion} />
+      <TouchableOpacity style={styles.button} onPress={handleConnexion}>
+        <Text style={styles.buttonText}>Se connecter</Text>
+      </TouchableOpacity>
     </View>
   );
 };
@@ -40,6 +42,21 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10,
     paddingHorizontal: 10,
+    borderRadius: 8,
+  },
+  button: {
+    width: '80%',
+    height: 40,
+    backgroundColor: 'blue',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 10,
+    borderRadius: 8,
+  },
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
   },
 });
 
