@@ -27,6 +27,7 @@
   ],
   "dependencies": {
     "anime-vostfr": "^1.2.3",
+    "bcrypt": "^5.1.0",
     "body-parser": "^1.20.2",
     "cloudscraper": "^4.6.0",
     "cors": "^2.8.5",

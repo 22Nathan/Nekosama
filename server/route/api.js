@@ -61,7 +61,7 @@ router.get('/api/anime', async (req, res) => {
                         if( await getAnimeByID(anime.id) === false ){
                             const newAnime = new Anime( anime )
                             const insert = await newAnime.save()
-                            console.log( 'insert' )
+                            // console.log( 'insert' )
                         }
                     }
                 })
@@ -88,7 +88,7 @@ router.get('/api/animevf', async (req, res) => {
                         if( await getAnimeByID(anime.id) === false ){
                             const newAnime = new AnimeVF( anime )
                             const insert = await newAnime.save()
-                            console.log( 'insert VF' )
+                            // console.log( 'insert VF' )
                         }
                     }
                 })

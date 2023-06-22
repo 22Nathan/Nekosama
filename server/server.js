@@ -26,8 +26,10 @@ mongoose.connect(process.env.MONGO, { useNewUrlParser: true, useUnifiedTopology:
 
 const animeRouter = require('./route/api')
 const animeVFRouter = require('./route/api')
+const userRouter = require('./route/apiUser')
 app.use('/', animeRouter)
 app.use('/', animeVFRouter)
+app.use('/', userRouter)
 
 module.exports = app
 
