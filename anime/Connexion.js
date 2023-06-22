@@ -1,12 +1,15 @@
 import React from 'react';
 import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import { CommonActions } from '@react-navigation/native';
 
 const Connexion = ({ navigation }) => {
   const handleConnexion = () => {
-    // Logique pour gérer la connexion de l'utilisateur
-
-    // Redirection vers la page ListAnime
-    navigation.navigate('ListAnime');
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'ListAnime' }]
+      })
+    );
   };
 
   return (
