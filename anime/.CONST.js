@@ -1,1 +1,1 @@
-export const ADRESSEIP = '10.74.0.235'
+export const ADRESSEIP = '10.74.1.99'

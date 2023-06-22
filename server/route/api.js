@@ -3,6 +3,7 @@
 const express = require('express')
 const router = express.Router()
 const Anime = require('../model/anime')
+const AnimeVF = require('../model/animeVF')
 const animeVostfr = require('../anime-vostfr');
 
 
@@ -12,6 +13,16 @@ const animeVostfr = require('../anime-vostfr');
 async function getAllAnimes(){
     try {
         const animes = await Anime.find()
+        return animes
+    } catch (error) {
+        return []
+    }
+}
+
+// FNC GET ALL VF
+async function getAllAnimesVF(){
+    try {
+        const animes = await AnimeVF.find()
         return animes
     } catch (error) {
         return []
@@ -38,7 +49,7 @@ async function getAnimeByID(paramId){
 // GET ALL
 router.get('/api/anime', async (req, res) => {
     try {
-        const animeData = await animeVostfr.loadAnime();
+        const animeData = await animeVostfr.loadAnime()
         // 5549
         // console.log(animeData.length);
         try {
@@ -50,7 +61,7 @@ router.get('/api/anime', async (req, res) => {
                         if( await getAnimeByID(anime.id) === false ){
                             const newAnime = new Anime( anime )
                             const insert = await newAnime.save()
-                            console.log( 'insert' );
+                            console.log( 'insert' )
                         }
                     }
                 })
@@ -60,7 +71,33 @@ router.get('/api/anime', async (req, res) => {
         res.status(200).json( await getAllAnimes() )
     } catch (error) {
         console.error(error)
-        res.status(500).json({ error: 'Une erreur est survenue lors de la récupération des données d\'anime.' });
+        res.status(500).json({ error: 'Une erreur est survenue lors de la récupération des données d\'anime.' })
+    }
+})
+
+
+// GET ALL VF
+router.get('/api/animevf', async (req, res) => {
+    try {
+        const animeDataVF = await animeVostfr.loadAnimeVF()
+
+        try {
+            if(animeDataVF && animeDataVF.length > 0){
+                animeDataVF.map(async (anime, i) => {
+                    if( anime.id ){
+                        if( await getAnimeByID(anime.id) === false ){
+                            const newAnime = new AnimeVF( anime )
+                            const insert = await newAnime.save()
+                            console.log( 'insert VF' )
+                        }
+                    }
+                })
+            }
+        } catch ( error ) { console.error( 'api get all ' + erreur ) }
+        res.status(200).json( await getAllAnimesVF() )
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Une erreur est survenue lors de la récupération des données d\'anime en VF.' });
     }
 });
   
@@ -69,48 +106,39 @@ router.get('/api/anime', async (req, res) => {
 router.post('/api/anime/more-info', async (req, res) => {
     const animeUrl = req.body.url
     try {
-      const animeInfo = await animeVostfr.getMoreInformation(animeUrl);
-      res.json(animeInfo);
+        const animeInfo = await animeVostfr.getMoreInformation(animeUrl);
+        res.json(animeInfo);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Une erreur est survenue lors de la récupération des informations supplémentaires d\'anime.' });
+        console.error(error);
+        res.status(500).json({ error: 'Une erreur est survenue lors de la récupération des informations supplémentaires d\'anime.' });
     }
 });
   
 
 router.post('/api/anime/embed', async (req, res) => {
     try {
-      const { url } = req.body;
-      const embedLink = await animeVostfr.getEmbed(url);
-      console.log(embedLink);
-      res.json({ embedLink });
+        const { url } = req.body;
+        const embedLink = await animeVostfr.getEmbed(url);
+        console.log(embedLink);
+        res.json({ embedLink });
     } catch (error) {
-      console.error('Error fetching embed link:', error);
-      res.status(500).json({ error: 'Une erreur est survenue lors de la récupération du lien embed.' });
+        console.error('Error fetching embed link:', error);
+        res.status(500).json({ error: 'Une erreur est survenue lors de la récupération du lien embed.' });
     }
 });
-  
-// GET ALL VF
-router.get('/api/animevf', async (req, res) => {
-    try {
-      const animeDataVF = await animeVostfr.loadAnimeVF();
-      res.json(animeDataVF);
-    } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Une erreur est survenue lors de la récupération des données d\'anime en VF.' });
-    }
-});
+
   
 // GET LAST EPISODES
 router.get('/api/last-episodes', async (req, res) => {
     try {
-      const lastEpisodes = await animeVostfr.getLastEpisodes();
-      res.json(lastEpisodes);
+        const lastEpisodes = await animeVostfr.getLastEpisodes();
+        res.json(lastEpisodes);
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'Une erreur est survenue lors de la récupération des derniers épisodes.' });
+        console.error(error);
+        res.status(500).json({ error: 'Une erreur est survenue lors de la récupération des derniers épisodes.' });
     }
 });
 
 
 module.exports = router
+
