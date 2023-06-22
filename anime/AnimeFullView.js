@@ -71,6 +71,7 @@ const AnimeFullView = ({ anime, moreInfo, onClose }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    flexBasis: '86%'
   },
   infoContainer: {
     flexDirection: 'row',
