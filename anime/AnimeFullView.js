@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import axios from 'axios';
 import { WebView } from 'react-native-webview';
 import { Picker } from '@react-native-picker/picker';
@@ -19,57 +19,68 @@ const AnimeFullView = ({ anime, moreInfo, onClose }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.infoContainer}>
-        <View style={styles.imageContainer}>
-          <Image source={{ uri: anime.url_image }} style={styles.image} resizeMode='contain' />
-        </View>
-        <View style={styles.infoContent}>
-          <Text style={styles.title}>{anime.title}</Text>
-          <View style={styles.infoText}>
-            <Text style={styles.info}>{anime.start_date_year}</Text>
-            <Text style={styles.info}>{anime.nb_eps}</Text>
+    <ScrollView contentContainerStyle={styles.scrollViewContentContainer}>
+      <View style={styles.container}>
+        <View style={styles.infoContainer}>
+          <View style={styles.imageContainer}>
+            <Image source={{ uri: anime.url_image }} style={styles.image} resizeMode='contain' />
           </View>
-          {moreInfo && moreInfo.eps && moreInfo.eps.length > 0 && (
-            <View style={styles.dropdown}>
-              <Text style={styles.dropdownLabel}>Épisodes:</Text>
-              <Picker
-                selectedValue=""
-                onValueChange={(value) => handleEpisodeClick(value)}
-              >
-                <Picker.Item label="Sélectionnez un épisode" value="" />
-                {moreInfo.eps.map((episode, index) => (
-                  <Picker.Item
-                    key={episode.url}
-                    label={`Episode ${index + 1}`}
-                    value={episode.url}
-                  />
-                ))}
-              </Picker>
+          <View style={styles.infoContent}>
+            <Text style={styles.title}>{anime.title}</Text>
+            <View style={styles.infoText}>
+              <Text style={styles.info}>{anime.start_date_year}</Text>
+              <Text style={styles.info}>{anime.nb_eps}</Text>
             </View>
+            {moreInfo && moreInfo.eps && moreInfo.eps.length > 0 && (
+              <View style={styles.dropdown}>
+                <Text style={styles.dropdownLabel}>Épisodes:</Text>
+                <Picker
+                  selectedValue=""
+                  onValueChange={(value) => handleEpisodeClick(value)}
+                >
+                  <Picker.Item label="Sélectionnez un épisode" value="" />
+                  {moreInfo.eps.map((episode, index) => (
+                    <Picker.Item
+                      key={episode.url}
+                      label={`Episode ${index + 1}`}
+                      value={episode.url}
+                    />
+                  ))}
+                </Picker>
+              </View>
+            )}
+          </View>
+        </View>
+        <View style={styles.trailerContainer}>
+          {moreInfo && moreInfo.trailer && (
+            <WebView
+              source={{ uri: moreInfo.trailer }}
+              style={styles.videoTrailer}
+              allowsFullscreenVideo={true}
+            />
           )}
         </View>
+        <View style={styles.videoContainer}>
+          {embedLink && (
+            <WebView
+              source={{ uri: embedLink }}
+              style={styles.videoStream}
+              allowsFullscreenVideo={true}
+            />
+          )}
+        </View>
+        <TouchableOpacity style={styles.closeButton} onPress={onClose}>
+          <Text style={styles.closeButtonText}>Close</Text>
+        </TouchableOpacity>
       </View>
-      <View style={styles.trailerContainer}>
-        {moreInfo && moreInfo.trailer && (
-          <WebView
-            source={{ uri: moreInfo.trailer }}
-            style={styles.videoTrailer}
-            allowsFullscreenVideo={true}
-          />
-        )}
-      </View>
-      <View style={styles.videoContainer}>
-        {embedLink && <WebView source={{ uri: embedLink }} style={styles.videoStream} allowsFullscreenVideo={true} />}
-      </View>
-      <TouchableOpacity style={styles.closeButton} onPress={onClose}>
-        <Text style={styles.closeButtonText}>Close</Text>
-      </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
+  scrollViewContentContainer: {
+    flexGrow: 1,
+  },
   container: {
     flex: 1,
     marginTop: 10
@@ -112,11 +123,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    height: 200
   },
   videoContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+    height: 200
   },
   videoTrailer: {
     flex: 1,
