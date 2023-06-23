@@ -8,6 +8,8 @@ import Pagination from './Pagination';
 import Filters from './Filters';
 import RenderLastEpisodes from './RenderLastEpisodes';
 import { ADRESSEIP } from './.CONST.js';
+import * as Notification from 'expo-notifications'
+
 
 const ListAnime = () => {
   const [animes, setAnimes] = useState([]);
@@ -25,6 +27,35 @@ const ListAnime = () => {
   const [lastEpisodes, setLastEpisodes] = useState([]);
   const [showLastEpisodes, setShowLastEpisodes] = useState(false);
   const [currentLastEpisodesPage, setCurrentLastEpisodesPage] = useState(1);
+
+  const start = (currentLastEpisodesPage - 1) * 28;
+  const end = start + 28;
+  const currentEpisodes = lastEpisodes.slice(start, end);
+
+  Notification.setNotificationHandler({
+    handleNotification: async () => ({
+      shouldPlaySound: false,
+      shouldSetBadge: false,
+      shouldShowAlert: true
+    })
+  })
+
+  async function schedulePushNotification() {
+    await Notification.scheduleNotificationAsync({
+      content: {
+        title: "You've got mail! 📬",
+        body: 'Here is the notification body',
+        data: lastEpisodes,
+      },
+      trigger: { seconds: 2 },
+    });
+  }
+
+  currentEpisodes.map((episode) => {
+    if(episode.time === 'Il y a 1 heure'){
+      schedulePushNotification()
+    }
+  })
 
   useEffect(() => {
     const fetchAnimes = async () => {
@@ -75,6 +106,7 @@ const ListAnime = () => {
     const fetchMoreInfo = async () => {
       if (selectedAnime && selectedAnime.url) {
         try {
+          console.log(selectedAnime.url)
           const response = await axios.post(`http://${ADRESSEIP}:8000/api/anime/more-info`, { url: selectedAnime.url });
           setMoreInfo(response.data);
         } catch (error) {
