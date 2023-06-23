@@ -32,7 +32,8 @@ router.post('/user/signup', async (req, res) => {
         if( req.body.email && req.body.password ){
             const newUser = new User({
                 email:req.body.email, 
-                password:req.body.password 
+                password:req.body.password,
+                phone: req.body.phone
             })
             const request = await newUser.save()
             res.status(201).json(newUser)
