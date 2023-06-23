@@ -20,8 +20,8 @@ const RenderLastEpisodes = ({ showLastEpisodes, lastEpisodes, currentLastEpisode
   console.log(mergedKeys);
   return (
     <View style={styles.lastEpisodes}>
-      <Text style={styles.heading}>Derniers épisodes</Text>
       <ScrollView>
+        <Text style={styles.heading}>Derniers épisodes</Text>
         <ScrollView horizontal>
           <View style={styles.pagination}>
             {renderLastEpisodesPaginationButtons(currentLastEpisodesPage, mergedKeys.length, changeLastEpisodesPage)}
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
     // Styles for "Aucun anime trouvé."
   },
   lastEpisodes: {
-    // Styles for the container view
+    flex: 1
   },
   heading: {
     marginLeft: 10,
