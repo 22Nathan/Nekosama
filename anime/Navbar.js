@@ -17,19 +17,14 @@ const Navbar = ({ isAdmin, loadVostfr, loadVf, setShowLastEpisodes }) => {
   };
 
   const gotoAdmin = async () => {
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: 'AdminScreen' }]
-      })
-    )
+    navigation.navigate('AdminScreen')
   }
 
   return (
     <>
       { isAdmin && (
       <View>
-        <TouchableOpacity style={{ padding:10 }} onPress={gotoAdmin}>
+        <TouchableOpacity style={{ padding:10, backgroundColor:'cyan', borderRadius:5 }} onPress={gotoAdmin}>
           <Text>
             Admin
           </Text>

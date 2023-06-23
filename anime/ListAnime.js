@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, TextInput, StyleSheet, ScrollView, TouchableWithoutFeedback  } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { View, TextInput, StyleSheet, ScrollView, TouchableWithoutFeedback, Platform  } from 'react-native';
 import axios from 'axios';
 import AnimeCard from './AnimeCard';
 import AnimeFullView from './AnimeFullView';
@@ -8,6 +8,10 @@ import Pagination from './Pagination';
 import Filters from './Filters';
 import RenderLastEpisodes from './RenderLastEpisodes';
 import { ADRESSEIP } from './.CONST.js';
+import * as Notifications from 'expo-notifications'
+import * as Device from 'expo-device';
+import * as SMS from 'expo-sms';
+
 import { CommonActions } from '@react-navigation/native';
 
 const ListAnime = ({navigation, route}) => {
@@ -29,6 +33,130 @@ const ListAnime = ({navigation, route}) => {
   const [lastEpisodes, setLastEpisodes] = useState([]);
   const [showLastEpisodes, setShowLastEpisodes] = useState(false);
   const [currentLastEpisodesPage, setCurrentLastEpisodesPage] = useState(1);
+
+  const start = (currentLastEpisodesPage - 1) * 28;
+  const end = start + 28;
+  const currentEpisodes = lastEpisodes.slice(start, end);
+  const episodes = {}
+
+  currentEpisodes.map((episode) => {
+    if(episode.time === 'il y a 1 heures'){
+      console.log('ICI');
+      episodes['time'] = episode.time
+      episodes['title'] = episode.title
+  }})
+
+
+  const handleSendSMS = async () => {
+    const isAvailable = await SMS.isAvailableAsync();
+
+    if (isAvailable) {
+      const { result } = await SMS.sendSMSAsync(
+        ['0766567645'], // Numéro de téléphone du destinataire (peut être un tableau de numéros pour l'envoi groupé)
+        `Bonjour L'anime ${episodes['title']} est sorti ${episodes['time']}`
+      );
+
+      if (result === SMS.SentStatus.Sent) {
+        console.log('SMS envoyé !');
+      } else {
+        console.log('Échec de l\'envoi du SMS.');
+      }
+    } else {
+      console.log('L\'envoi de SMS n\'est pas disponible sur cet appareil.');
+    }
+  };
+
+  currentEpisodes.map((episode) => {
+    if(episode.time === 'il y a 1 heures'){
+      handleSendSMS()
+    }
+  })
+
+
+
+  // Notifications.setNotificationHandler({
+  //   handleNotification: async () => ({
+  //     shouldPlaySound: false,
+  //     shouldSetBadge: false,
+  //     shouldShowAlert: true
+  //   })
+  // })
+
+  // async function registerForPushNotificationsAsync() {
+  //   let token;
+  
+  //   if (Platform.OS === 'android') {
+  //     await Notifications.setNotificationChannelAsync('default', {
+  //       name: 'default',
+  //       importance: Notifications.AndroidImportance.MAX,
+  //       vibrationPattern: [0, 250, 250, 250],
+  //       lightColor: '#FF231F7C',
+  //     });
+  //   }
+  
+  //   if (Device.isDevice) {
+  //     const { status: existingStatus } = await Notifications.getPermissionsAsync();
+  //     let finalStatus = existingStatus;
+  //     if (existingStatus !== 'granted') {
+  //       try {
+  //         const { status } = await Notifications.requestPermissionsAsync();
+  //         finalStatus = status
+  //       } catch (error) {
+  //         console.log(error)
+  //       }
+  //     }
+      
+  //     if (finalStatus !== 'granted') {
+  //       alert('Failed to get push token for push notification! :', finalStatus);
+  //       return;
+  //     }
+  //     token = (await Notifications.getExpoPushTokenAsync()).data;
+  //     console.log(token);
+  //   } else {
+  //     alert('Must use physical device for Push Notifications');
+  //   }
+  
+  //   return token;  
+  // }
+
+  // useEffect(() => {
+  //   registerForPushNotificationsAsync().then(token => setExpoPushToken(token));
+
+  //   notificationListener.current = Notifications.addNotificationReceivedListener(notification => {
+  //     setNotification(notification);
+  //   });
+
+  //   responseListener.current = Notifications.addNotificationResponseReceivedListener(response => {
+  //     console.log(response);
+  //   });
+
+  //   return () => {
+  //     Notifications.removeNotificationSubscription(notificationListener.current);
+  //     Notifications.removeNotificationSubscription(responseListener.current);
+  //   };
+  // }, []);
+
+  // async function schedulePushNotification() {
+  //   await Notifications.scheduleNotificationAsync({
+  //     content: {
+  //       title: "You've got mail! 📬",
+  //       body: 'Here is the notification body',
+  //     },
+  //     trigger: { seconds: 2 },
+  //   });
+  // }
+
+  // currentEpisodes.map((episode) => {
+  //   if(episode.time === 'Il y a 10 heures'){
+  //     console.log('ICI');
+
+  //     try {
+  //       schedulePushNotification()
+  //     } catch (error) {
+  //       console.log('Voici l\'erreur : ', error)
+  //     }
+  //   }
+  // })
 
   useEffect(() => {
     const fetchAnimes = async () => {
@@ -79,6 +207,7 @@ const ListAnime = ({navigation, route}) => {
     const fetchMoreInfo = async () => {
       if (selectedAnime && selectedAnime.url) {
         try {
+          console.log(selectedAnime.url)
           const response = await axios.post(`http://${ADRESSEIP}:8000/api/anime/more-info`, { url: selectedAnime.url });
           setMoreInfo(response.data);
         } catch (error) {
