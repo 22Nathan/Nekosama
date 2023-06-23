@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import LastEpisodeComponent from './LastEpisodeComponent';
 
 const RenderLastEpisodes = ({ showLastEpisodes, lastEpisodes, currentLastEpisodesPage, handleAnimeClick, changeLastEpisodesPage, currentAnimes }) => {
@@ -20,46 +20,50 @@ const RenderLastEpisodes = ({ showLastEpisodes, lastEpisodes, currentLastEpisode
   console.log(mergedKeys);
   return (
     <View style={styles.lastEpisodes}>
-      <Text style={styles.heading}>Derniers épisodes</Text>
-      <View style={styles.row}>
-        {currentEpisodes.map((episode) => {
-          // Find the merged key for the current episode
-          const mergedKey = mergedKeys.find((key) => key.title === episode.title);
+      <ScrollView>
+        <Text style={styles.heading}>Derniers épisodes</Text>
+        <ScrollView horizontal>
+          <View style={styles.pagination}>
+            {renderLastEpisodesPaginationButtons(currentLastEpisodesPage, mergedKeys.length, changeLastEpisodesPage)}
+          </View>
+        </ScrollView>
+        <View style={styles.row}>
+          {currentEpisodes.map((episode) => {
+            // Find the merged key for the current episode
+            const mergedKey = mergedKeys.find((key) => key.title === episode.title);
 
-          return (
-            <TouchableOpacity key={episode.timestamp} style={styles.col} onPress={() => handleAnimeClick(mergedKey)}>
-              {mergedKey && (
-                <LastEpisodeComponent
-                  title={mergedKey.title}
-                  url_image={mergedKey.url_bg}
-                  episode={mergedKey.episodeEpisode}
-                  time={mergedKey.time}
-                  lang={mergedKey.lang === 'vf' ? true : false}
-                />
-              )}
-            </TouchableOpacity>
-          );
-        })}
-      </View>
-      <View style={styles.pagination}>
-        {renderLastEpisodesPaginationButtons(currentLastEpisodesPage, lastEpisodes.length, changeLastEpisodesPage)}
-      </View>
+            return (
+              <TouchableOpacity key={episode.timestamp} style={styles.col} onPress={() => handleAnimeClick(mergedKey)}>
+                {mergedKey && (
+                  <LastEpisodeComponent
+                    title={mergedKey.title}
+                    url_image={mergedKey.url_bg}
+                    episode={mergedKey.episodeEpisode}
+                    time={mergedKey.time}
+                    lang={mergedKey.lang === 'vf' ? true : false}
+                  />
+                )}
+              </TouchableOpacity>
+            );
+          })}
+        </View>
+      </ScrollView>
     </View>
   );
 };
 
-const renderLastEpisodesPaginationButtons = (currentLastEpisodesPage, lastEpisodesCount, changeLastEpisodesPage) => {
+const renderLastEpisodesPaginationButtons = (currentLastEpisodesPage, mergedKeysCount, changeLastEpisodesPage) => {
   const paginationButtons = [];
 
   if (currentLastEpisodesPage > 1) {
     paginationButtons.push(
       <TouchableOpacity key="prev" onPress={() => changeLastEpisodesPage(currentLastEpisodesPage - 1)}>
-        <Text>&lt;</Text>
+        <Text style={styles.paginationText}>&lt;</Text>
       </TouchableOpacity>
     );
   }
 
-  const maxPage = Math.min(Math.ceil(lastEpisodesCount / 28), 5);
+  const maxPage = Math.ceil(mergedKeysCount / 28);
   const startPage = Math.max(1, currentLastEpisodesPage - 2);
   const endPage = startPage + maxPage - 1;
 
@@ -70,15 +74,17 @@ const renderLastEpisodesPaginationButtons = (currentLastEpisodesPage, lastEpisod
         style={currentLastEpisodesPage === page ? styles.activeButton : styles.paginationButton}
         onPress={() => changeLastEpisodesPage(page)}
       >
-        <Text>{page}</Text>
+        <Text style={currentLastEpisodesPage === page ? styles.activeButtonText : styles.paginationButtonText}>
+          {page}
+        </Text>
       </TouchableOpacity>
     );
   }
 
-  if (currentLastEpisodesPage < Math.ceil(lastEpisodesCount / 28)) {
+  if (currentLastEpisodesPage < maxPage) {
     paginationButtons.push(
       <TouchableOpacity key="next" onPress={() => changeLastEpisodesPage(currentLastEpisodesPage + 1)}>
-        <Text>&gt;</Text>
+        <Text style={styles.paginationText}>&gt;</Text>
       </TouchableOpacity>
     );
   }
@@ -115,15 +121,15 @@ const mergeKeysWithSameTitle = (lastEpisodes, currentAnimes) => {
 
 export default RenderLastEpisodes;
 
-const styles = {
+const styles = StyleSheet.create({
   noAnime: {
     // Styles for "Aucun anime trouvé."
   },
   lastEpisodes: {
-    // Styles for the container view
+    flex: 1
   },
   heading: {
-    // Styles for the heading text
+    marginLeft: 10,
   },
   row: {
     // Styles for the row view
@@ -132,12 +138,39 @@ const styles = {
     // Styles for the column view
   },
   pagination: {
-    // Styles for the pagination view
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginTop: 20,
+    marginBottom: 20,
+    marginLeft: 5
   },
   activeButton: {
-    // Styles for the active pagination button
+    backgroundColor: 'blue',
+    borderRadius: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    marginHorizontal: 5,
   },
   paginationButton: {
-    // Styles for the pagination button
-  }
-};
+    backgroundColor: '#ddd',
+    borderRadius: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    marginHorizontal: 5,
+  },
+  activeButtonText: {
+    color: 'white',
+    fontWeight: 'bold',
+  },
+  paginationButtonText: {
+    color: 'black',
+  },
+  paginationText: {
+    fontSize: 16,
+    backgroundColor: '#ddd',
+    borderRadius: 5,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    marginHorizontal: 5,
+  },
+});
