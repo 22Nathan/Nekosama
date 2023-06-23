@@ -1,25 +1,55 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 
-const Navbar = ({ loadVostfr, loadVf, setShowLastEpisodes }) => {
+
+import React, { useEffect, useState } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { CommonActions } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native'
+
+
+const Navbar = ({ isAdmin, loadVostfr, loadVf, setShowLastEpisodes }) => {
+
+  const navigation = useNavigation()
+  // const [isAdminv, setIsAdminv] = useState(false)
+  // setIsAdminv(isAdmin)
+
   const handleLastEpisodesClick = () => {
     setShowLastEpisodes(true);
   };
 
+  const gotoAdmin = async () => {
+    navigation.dispatch(
+      CommonActions.reset({
+        index: 0,
+        routes: [{ name: 'AdminScreen' }]
+      })
+    )
+  }
+
   return (
-    <View style={styles.navbar}>
-      <View style={styles.navbarList}>
-        <TouchableOpacity onPress={loadVostfr} style={styles.navbarItem}>
-          <Text style={styles.navbarLink}>Anime VOSTFR</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={loadVf} style={styles.navbarItem}>
-          <Text style={styles.navbarLink}>Anime VF</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handleLastEpisodesClick} style={[styles.navbarItem, styles.lastNavbarItem]}>
-          <Text style={styles.navbarLink}>Dernières sorties</Text>
+    <>
+      { isAdmin && (
+      <View>
+        <TouchableOpacity style={{ padding:10 }} onPress={gotoAdmin}>
+          <Text>
+            Admin
+          </Text>
         </TouchableOpacity>
       </View>
-    </View>
+      ) }
+      <View style={styles.navbar}>
+        <View style={styles.navbarList}>
+          <TouchableOpacity onPress={loadVostfr} style={styles.navbarItem}>
+            <Text style={styles.navbarLink}>Anime VOSTFR</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={loadVf} style={styles.navbarItem}>
+            <Text style={styles.navbarLink}>Anime VF</Text>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={handleLastEpisodesClick} style={[styles.navbarItem, styles.lastNavbarItem]}>
+            <Text style={styles.navbarLink}>Dernières sorties</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
+    </>
   );
 };
 
