@@ -10,8 +10,12 @@ import RenderLastEpisodes from './RenderLastEpisodes';
 import { ADRESSEIP } from './.CONST.js';
 import * as Notification from 'expo-notifications'
 
+import { CommonActions } from '@react-navigation/native';
 
-const ListAnime = () => {
+const ListAnime = ({navigation, route}) => {
+
+  const {isAdmin} = route.params
+
   const [animes, setAnimes] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
@@ -262,7 +266,7 @@ const ListAnime = () => {
 
   return (
     <View style={styles.app}>
-      <Navbar loadVostfr={loadVostfr} loadVf={loadVf} setShowLastEpisodes={setShowLastEpisodes} />
+      <Navbar loadVostfr={loadVostfr} loadVf={loadVf} isAdmin={isAdmin} setShowLastEpisodes={setShowLastEpisodes} />
       <View style={styles.list_anime}>
         <TextInput
           style={styles.search}

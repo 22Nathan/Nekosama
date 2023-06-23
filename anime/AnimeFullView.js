@@ -55,11 +55,12 @@ const AnimeFullView = ({ anime, moreInfo, onClose }) => {
           <WebView
             source={{ uri: moreInfo.trailer }}
             style={styles.videoTrailer}
+            allowsFullscreenVideo={true}
           />
         )}
       </View>
       <View style={styles.videoContainer}>
-        {embedLink && <WebView source={{ uri: embedLink }} style={styles.videoStream} />}
+        {embedLink && <WebView source={{ uri: embedLink }} style={styles.videoStream} allowsFullscreenVideo={true} />}
       </View>
       <TouchableOpacity style={styles.closeButton} onPress={onClose}>
         <Text style={styles.closeButtonText}>Close</Text>
@@ -71,7 +72,7 @@ const AnimeFullView = ({ anime, moreInfo, onClose }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexBasis: '86%'
+    marginTop: 10
   },
   infoContainer: {
     flexDirection: 'row',

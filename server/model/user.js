@@ -6,7 +6,7 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 
 const userSchema = new mongoose.Schema({
-    pseudo: { type: String },
+    isAdmin: { type: Boolean, default:false },
     email: { type: String, required: true, unique: true },
     password: { type: String },
 })

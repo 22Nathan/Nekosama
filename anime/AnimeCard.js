@@ -21,7 +21,7 @@ const AnimeCard = ({ title, imageUrl, start_date_year, nb_eps, onClick, isVFMode
       <View style={styles.imageContainer}>
         <View style={styles.icons}>
           {isVFMode ? <Text style={[styles.icon, styles.red]}>VF</Text> : <Text style={[styles.icon, styles.red]}>VOSTFR</Text>}
-          {format && <Text style={styles.icon}>{renderFormat()}</Text>}
+          {format && <Text style={[styles.iconFormat, styles.red]}>{renderFormat()}</Text>}
         </View>
         <Image source={{ uri: imageUrl }} style={styles.image} />
       </View>
@@ -51,12 +51,21 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     marginRight: 10,
+
   },
   icons: {
     flexDirection: 'row',
     marginBottom: 5,
   },
   icon: {
+    marginRight: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    fontSize: 12,
+    color: '#fff',
+    borderRadius: 4,
+  },
+  iconFormat: {
     marginRight: 5,
     paddingHorizontal: 5,
     paddingVertical: 2,

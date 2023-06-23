@@ -33,9 +33,10 @@ const RenderLastEpisodes = ({ showLastEpisodes, lastEpisodes, currentLastEpisode
             const mergedKey = mergedKeys.find((key) => key.title === episode.title);
 
             return (
-              <TouchableOpacity key={episode.timestamp} style={styles.col} onPress={() => handleAnimeClick(mergedKey)}>
+              <TouchableOpacity key={episode.timestamp} style={styles.col}>
                 {mergedKey && (
                   <LastEpisodeComponent
+                    onClick={() => handleAnimeClick(mergedKey)}
                     title={mergedKey.title}
                     url_image={mergedKey.url_bg}
                     episode={mergedKey.episodeEpisode}
