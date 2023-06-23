@@ -7,7 +7,7 @@ const LastEpisodeComponent = ({ title, url_image, episode, time, onClick, lang }
       <View style={styles.imageContainer}>
         <View style={styles.icons}>
           <Text style={styles.icon}>{lang ? 'VF' : 'VOSTFR'}</Text>
-          <Text style={styles.timeIcon}>{time}</Text>
+          <Text style={styles.icons}>{time}</Text>
         </View>
         <Image source={{ uri: url_image }} style={styles.image} />
       </View>
