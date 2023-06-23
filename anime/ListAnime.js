@@ -274,7 +274,6 @@ const ListAnime = ({navigation, route}) => {
 const styles = StyleSheet.create({
   app: {
     flex: 1,
-    marginTop: 30
   },
   list_anime: {
     flex: 1,
