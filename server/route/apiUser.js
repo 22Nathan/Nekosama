@@ -5,28 +5,22 @@ const router = express.Router()
 const User = require('../model/user')
 
 
-router.get('/user/login', async (req, res) => {
+router.post('/user/login', async (req, res) => {
+
+    console.log(req.body);
 
     try {
         const user = await User.findOne({ email: req.body.email })
-        if (!user) {
-            res.setHeader('Content-Type', 'application/json')
-            res.status(500).json( { userFound: false, user: null } )
-        }
+        res.setHeader('Content-Type', 'application/json')
+        if (!user) { res.status(500).json( { userFound: false, user: null } ) }
         else {
             const isMatch = await user.comparePassword( req.body.password )
-            if (isMatch) {
-                res.setHeader('Content-Type', 'application/json')
-                res.status(200).json( { userFound: true, user: user } )
-            }
-            else {
-                res.setHeader('Content-Type', 'application/json')
-                res.status(500).json( { userFound: false, user: null } )
-            }
+            if (isMatch) { res.status(200).json( { userFound: true, user: user } ) }
+            else { res.status(500).json( { userFound: false, user: null } ) }
         }
     } catch (error) {
         res.setHeader('Content-Type', 'application/json')
-        res.status(500).json( { message: error.message } )
+        res.status(500).json( { userFound:false, message: error.message } )
     }
 
 })
@@ -35,10 +29,9 @@ router.get('/user/login', async (req, res) => {
 router.post('/user/signup', async (req, res) => {
 
     try {
-        if( req.body.email && req.body.password && req.body.pseudo ){
+        if( req.body.email && req.body.password ){
             const newUser = new User({
                 email:req.body.email, 
-                pseudo:req.body.pseudo, 
                 password:req.body.password 
             })
             const request = await newUser.save()

@@ -1,22 +1,68 @@
 import React from 'react';
 import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
+import { ADRESSEIP } from './.CONST.js';
+import { useState } from 'react';
 
 const Inscription = ({ navigation }) => {
-  const handleConnexion = () => {
-    navigation.dispatch(
-      CommonActions.reset({
-        index: 0,
-        routes: [{ name: 'ListAnime' }]
+
+  const [inputEmail, setInputEmail] = useState('');
+  const [inputPassword, setInputPassword] = useState('');
+
+  const handleInputChangeEmail = (text) => {
+    setInputEmail(text);
+  }
+  const handleInputChangePassword = (text) => {
+    setInputPassword(text);
+  }
+
+  const handleConnexion = async () => {
+
+    const urlwt = `http://${ADRESSEIP}:8000/user/signup`
+
+    try {
+      const response = await fetch( urlwt, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email:inputEmail,
+          password:inputPassword
+        })
       })
-    );
+
+      if (response.ok) {
+        const result = await response.json();
+        console.log('Response:', result);
+        if( result ){
+          console.log('Utilisateur créé')
+          navigation.dispatch(
+            CommonActions.reset({
+              index: 0,
+              routes: [{ 
+                name: 'ListAnime',
+                params: {
+                  isAdmin:result.user.isAdmin || false
+                }
+               }]
+            })
+          )
+        }
+      } else { console.error('Utilisateur déjà existant') }
+    } catch (error) { console.log(error); }
+
+    // navigation.dispatch(
+    //   CommonActions.reset({
+    //     index: 0,
+    //     routes: [{ name: 'ListAnime' }]
+    //   })
+    // );
   };
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Inscription</Text>
-      <TextInput style={styles.input} placeholder="Email" keyboardType="email-address" autoCapitalize="none" autoCorrect={false} autoCompleteType="email"/>
-      <TextInput style={styles.input} placeholder="Mot de passe" secureTextEntry={true} />
+      <TextInput style={styles.input} onChangeText={handleInputChangeEmail} placeholder="Email" keyboardType="email-address" autoCapitalize="none" autoCorrect={false} autoCompleteType="email"/>
+      <TextInput style={styles.input} onChangeText={handleInputChangePassword} placeholder="Mot de passe" secureTextEntry={true} />
       <TouchableOpacity style={styles.button} onPress={handleConnexion}>
         <Text style={styles.buttonText}>S'inscrire</Text>
       </TouchableOpacity>
