@@ -8,8 +8,6 @@ import Pagination from './Pagination';
 import Filters from './Filters';
 import RenderLastEpisodes from './RenderLastEpisodes';
 import { ADRESSEIP } from './.CONST.js';
-import * as Notifications from 'expo-notifications'
-import * as Device from 'expo-device';
 import * as SMS from 'expo-sms';
 
 import { CommonActions } from '@react-navigation/native';
