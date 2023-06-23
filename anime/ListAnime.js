@@ -257,6 +257,7 @@ const ListAnime = () => {
               currentLastEpisodesPage={currentLastEpisodesPage}
               handleAnimeClick={handleAnimeClick}
               changeLastEpisodesPage={changeLastEpisodesPage}
+              currentAnimes={filteredAnimes}
             />
             {renderAnimes()}
           </>
