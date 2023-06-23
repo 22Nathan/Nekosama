@@ -6,8 +6,8 @@ const LastEpisodeComponent = ({ title, url_image, episode, time, onClick, lang }
     <TouchableOpacity style={styles.animeCard} onPress={onClick}>
       <View style={styles.imageContainer}>
         <View style={styles.icons}>
-          <Text style={styles.icon}>{lang ? 'VF' : 'VOSTFR'}</Text>
-          <Text style={styles.icons}>{time}</Text>
+          <Text style={[styles.icon, styles.red]}>{lang ? 'VF' : 'VOSTFR'}</Text>
+          <Text style={[styles.icon, styles.blue]}>{time}</Text>
         </View>
         <Image source={{ uri: url_image }} style={styles.image} />
       </View>
@@ -36,6 +36,7 @@ const styles = StyleSheet.create({
   },
   imageContainer: {
     marginRight: 10,
+
   },
   icons: {
     flexDirection: 'row',
@@ -49,8 +50,19 @@ const styles = StyleSheet.create({
     color: '#fff',
     borderRadius: 4,
   },
+  iconFormat: {
+    marginRight: 5,
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    fontSize: 12,
+    color: '#fff',
+    borderRadius: 4,
+  },
   red: {
     backgroundColor: 'red',
+  },
+  blue: {
+    backgroundColor: 'blue',
   },
   image: {
     width: 100,
